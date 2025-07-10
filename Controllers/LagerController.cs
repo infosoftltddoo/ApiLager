@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 [ApiController]
@@ -35,12 +36,16 @@ public class LagerController : ControllerBase
         try
         {
             var results = new List<object>();
-            using var conn = new SqlConnection(_config.GetConnectionString("Agsol2025"));
-            using var cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("@search", $"%{q}%");
+            await using var conn = new SqlConnection(_config.GetConnectionString("Agsol2025"));
+            await using var cmd = new SqlCommand(sql, conn);
+
+            // Precizno postavljanje tipa i dužine parametra
+            cmd.Parameters.Add("@search", SqlDbType.VarChar, 200)
+               .Value = $"%{q}%";
+
             await conn.OpenAsync();
 
-            using var reader = await cmd.ExecuteReaderAsync();
+            await using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
                 results.Add(new

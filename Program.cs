@@ -8,9 +8,7 @@ builder.Services.AddCors(opt => {
 });
 builder.Services.AddControllers();
 var app = builder.Build();
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "7285";
-//app.Urls.Add($"http://*:{port}");
-app.UseRouting();
+//app.UseRouting();
 app.UseCors("AllowWP");
 app.MapControllers();
 app.Run();
