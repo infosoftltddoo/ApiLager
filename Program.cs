@@ -1,7 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(opt => {
     opt.AddPolicy("AllowWP", p => p
-      .WithOrigins("https://infosoftpa.com")
+    .AllowAnyOrigin()
+      //.WithOrigins("https://infosoftpa.com")
       .AllowAnyHeader()
       .AllowAnyMethod()
       .AllowCredentials());
