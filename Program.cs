@@ -1,14 +1,24 @@
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCors(opt => {
-    opt.AddPolicy("AllowWP", p => p
-      .WithOrigins("https://infosoftpa.com")
-      .AllowAnyHeader()
-      .AllowAnyMethod()
-      .AllowCredentials());
+
+// Dodaj servise
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+      policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 });
+
 builder.Services.AddControllers();
+
 var app = builder.Build();
-//app.UseRouting();
-app.UseCors("AllowWP");
+app.UseCors();
+// Middleware pipeline
+app.UseRouting();
+
+
+
 app.MapControllers();
+
 app.Run();
+
